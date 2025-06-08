@@ -1,7 +1,12 @@
-
+import Visualizer from "@/components/algorithms/visualizer";
 
 export default function Home() {
   return (
-    <h1>dsa visualizer</h1>
+    <>
+      
+      <Visualizer />
+    </>
+
+
   );
 }
