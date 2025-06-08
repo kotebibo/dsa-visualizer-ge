@@ -4,7 +4,7 @@ import React from 'react';
 
 interface DropdownProps {
   onSelect: (value: number) => void;
-  options: number[];
+  options: any[];
   className?: string;
 }
 
