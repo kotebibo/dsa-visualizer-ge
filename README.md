@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DSA Visualizer 🚀
 
-## Getting Started
+An interactive **Data Structures & Algorithms Visualizer** built with **Next.js 15**, **TypeScript**, and **Tailwind CSS**. This application helps students and developers understand sorting algorithms through beautiful, real-time visualizations.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Interactive Bubble Sort Visualization** with step-by-step animation
+- **Customizable Array Sizes** (5, 10, 15, 20 elements)
+- **Speed Control** - Adjust sorting speed from 100ms to 2000ms
+- **Real-time Visual Feedback** with color-coded states:
+  - 🔴 **Red**: Elements currently being compared
+  - 🟢 **Green**: Sorted elements
+  - 🔵 **Blue**: Unsorted elements
+- **Array Randomization** - Shuffle elements for different test cases
+- **Educational Information** - Algorithm complexity and explanation
+- **Responsive Design** - Works on desktop and mobile devices
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4
+- **State Management**: React Hooks (useState, useEffect, custom hooks)
+- **Architecture**: Component-based with custom hook patterns
+
+## 📦 Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd dsa-visualizer-ge
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   ```
+
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   # or
+   pnpm dev
+   ```
+
+4. **Open your browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000) to see the application.
+
+## 🎯 Usage
+
+1. **Select Array Size**: Use the dropdown to choose how many elements to sort (5-20)
+2. **Randomize Array**: Click "Randomize Array" to shuffle the elements
+3. **Adjust Speed**: Use the speed slider to control animation speed
+4. **Start Sorting**: Click "Start Bubble Sort" to begin the visualization
+5. **Stop Anytime**: Click "Stop Sort" to halt the animation
+
+## 🏗️ Project Structure
+
+```
+src/
+├── app/
+│   ├── globals.css          # Global styles and Tailwind imports
+│   ├── layout.tsx           # Root layout component
+│   └── page.tsx             # Home page
+├── components/
+│   ├── algorithms/
+│   │   └── visualizer.tsx   # Main visualization component
+│   └── ui/
+│       ├── Button.tsx       # Reusable button component
+│       └── Dropdown.tsx     # Dropdown selection component
+└── hooks/
+    └── useBubbleSort.ts     # Custom hook for bubble sort logic
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔧 Key Components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### `Visualizer` Component
+The main component that orchestrates the entire visualization experience, including controls and the sorting display.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### `useBubbleSort` Hook
+A custom React hook that encapsulates:
+- Bubble sort algorithm implementation
+- State management for visualization
+- Async/await pattern for smooth animations
+- Start/stop functionality
 
-## Learn More
+### UI Components
+- **Button**: Reusable button with variants (primary, secondary, success)
+- **Dropdown**: Select component for choosing array sizes
 
-To learn more about Next.js, take a look at the following resources:
+## 🎨 Algorithm Information
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Bubble Sort
+- **Time Complexity**: O(n²) - Quadratic time in worst and average cases
+- **Space Complexity**: O(1) - Constant space (in-place sorting)
+- **Stability**: Stable - Equal elements maintain relative order
+- **Method**: Comparison-based sorting algorithm
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**How it works**: Bubble sort repeatedly compares adjacent elements and swaps them if they're in the wrong order. The largest elements "bubble" to the end of the array in each pass.
 
-## Deploy on Vercel
+## 🚀 Future Enhancements
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- [ ] Add more sorting algorithms (Quick Sort, Merge Sort, Selection Sort)
+- [ ] Implement data structure visualizations (Binary Trees, Graphs)
+- [ ] Add algorithm comparison features
+- [ ] Include search algorithm visualizations
+- [ ] Add sound effects for enhanced experience
+- [ ] Export visualization as GIF/video
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤝 Contributing
+
+Contributions are welcome! Here's how you can help:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+## 🙏 Acknowledgments
+
+- Built with [Next.js](https://nextjs.org/) - The React Framework for Production
+- Styled with [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework
+- Inspired by the need to make algorithms more accessible and visual
+
+---
+
+**Happy Learning! 🎓** Made with ❤️ for the developer community.
