@@ -2,13 +2,28 @@
 import React, { useState, useEffect } from 'react';
 import Button from '../ui/Button'; 
 import Dropdown from '../ui/Dropdown';
+import { getSortingAlgorithms, getAlgorithmById, ALGORITHM_HOOKS } from '../../registry/algorithmRegistry';
 import { useBubbleSort } from '../../hooks/useBubbleSort';
+import { useSelectionSort } from '../../hooks/useSelectionSort';
 
 const Visualizer: React.FC = () => {
-    const [count, setCount] = useState<number>(0);
+    const [count, setCount] = useState<number>(10);
     const [items, setItems] = useState<number[]>([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-
-    // Use the custom bubble sort hook
+    const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>('bubbleSort');    // Get available algorithms for dropdown
+    const availableAlgorithms = getSortingAlgorithms();
+    
+    // Call all hooks (required by React rules of hooks)
+    const bubbleSortState = useBubbleSort(items, setItems);
+    const selectionSortState = useSelectionSort(items, setItems);
+    
+    // Select the current algorithm's state based on selection
+    const algorithmStates = {
+        bubbleSort: bubbleSortState,
+        selectionSort: selectionSortState,
+    };
+    
+    const currentAlgorithmState = algorithmStates[selectedAlgorithm as keyof typeof algorithmStates] || bubbleSortState;
+    
     const {
         comparing,
         sorted,
@@ -18,9 +33,10 @@ const Visualizer: React.FC = () => {
         stopSort,
         setSortingSpeed,
         resetVisualization
-    } = useBubbleSort(items, setItems);
-
-
+    } = currentAlgorithmState;
+    
+    // Get current algorithm info for display
+    const currentAlgorithmInfo = getAlgorithmById(selectedAlgorithm);
     // Generate numbers whenever count changes
     useEffect(() => {
         if (count > 0) {
@@ -32,10 +48,17 @@ const Visualizer: React.FC = () => {
     const randomizeItemsIndex = () => {
         const shuffled = [...items].sort(() => Math.random() - 0.5);
         setItems(shuffled);
-    }
+    };
 
-    const handleCountChange = (newCount: number) => {
+    const handleCountChange = (value: number | string) => {
+        const newCount = typeof value === 'number' ? value : parseInt(value.toString());
         setCount(newCount);
+    };    const handleAlgorithmChange = (value: number | string) => {
+        const algorithmId = value.toString();
+        if (!sorting && ALGORITHM_HOOKS[algorithmId]) {
+            setSelectedAlgorithm(algorithmId);
+            resetVisualization(); // Reset visualization state when changing algorithms
+        }
     };
 
 
@@ -54,13 +77,12 @@ const Visualizer: React.FC = () => {
                 >
                     Randomize Array
                 </Button>
-                
-                <Button 
+                  <Button 
                     onClick={startSort}
                     disabled={sorting}
                     variant="success"
                 >
-                    {sorting ? "Sorting..." : "Start Bubble Sort"}
+                    {sorting ? "Sorting..." : `Start ${currentAlgorithmInfo?.name || 'Sort'}`}
                 </Button>
                 
                 {sorting && (
@@ -71,11 +93,18 @@ const Visualizer: React.FC = () => {
                         Stop Sort
                     </Button>
                 )}
-                
-                <Dropdown 
+                  <Dropdown 
                     onSelect={handleCountChange} 
                     options={[5, 10, 15, 20]} 
                     className="mt-0"
+                    placeholder="Select array size"
+                    isNumeric={true}
+                />                <Dropdown
+                    onSelect={handleAlgorithmChange}
+                    options={availableAlgorithms.map(algo => ({ id: algo.id, name: algo.name }))}
+                    className="mt-0"
+                    placeholder="Select algorithm"
+                    isNumeric={false}
                 />
             </div>
 
@@ -94,17 +123,18 @@ const Visualizer: React.FC = () => {
                     className="w-64"
                     disabled={sorting}
                 />
-            </div>
-
-            {/* Visualization Container */}
+            </div>            {/* Visualization Container */}
             <div className="flex items-end gap-1 p-5 bg-gray-50 rounded-lg" style={{ height: '400px' }}>
                 {items.map((value, index) => {
-                    // Determine bar color based on state
+                    // Determine bar color based on state and algorithm type
                     let colorClass = "bg-blue-500 border-blue-700"; // Default: unsorted
                     
                     if (comparing.includes(index)) {
                         colorClass = "bg-red-500 border-red-700"; // Comparing
-                    } else if (index >= items.length - sorted) {
+                    } else if (
+                        (selectedAlgorithm === 'bubbleSort' && index >= items.length - sorted) ||
+                        (selectedAlgorithm === 'selectionSort' && index < sorted)
+                    ) {
                         colorClass = "bg-green-500 border-green-700"; // Sorted
                     }
                     
@@ -134,17 +164,15 @@ const Visualizer: React.FC = () => {
                     <div className="w-4 h-4 bg-blue-500 rounded"></div>
                     <span>Unsorted</span>
                 </div>
-            </div>
-
-            {/* Algorithm Info */}
+            </div>            {/* Algorithm Info */}
             <div className="mt-6 bg-gray-100 p-4 rounded-lg">
-                <h3 className="text-lg font-semibold mb-2">Bubble Sort Algorithm</h3>
+                <h3 className="text-lg font-semibold mb-2">{currentAlgorithmInfo?.name || 'Algorithm'}</h3>
                 <p className="text-sm text-gray-700 mb-2">
-                    <strong>Time Complexity:</strong> O(n²) | <strong>Space Complexity:</strong> O(1)
+                    <strong>Time Complexity:</strong> {currentAlgorithmInfo?.timeComplexity || 'N/A'} | 
+                    <strong> Space Complexity:</strong> {currentAlgorithmInfo?.spaceComplexity || 'N/A'}
                 </p>
                 <p className="text-sm text-gray-600">
-                    Bubble sort repeatedly compares adjacent elements and swaps them if they're in the wrong order.
-                    The largest elements "bubble" to the end of the array in each pass.
+                    {currentAlgorithmInfo?.description || 'No description available.'}
                 </p>
             </div>
         </div>
